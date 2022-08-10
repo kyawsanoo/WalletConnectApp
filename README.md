@@ -5,4 +5,4 @@ A simple android native Dapp that connect Crypto Wallet using Wallet Connect ver
 
 ## References
 - [WalletConnect v1.0 SDK](https://github.com/WalletConnect/kotlin-walletconnect-lib) - library to use WalletConnect with Kotlin or Java.
-- [WalletConnect v1.0 documentation](https://docs.walletconnect.com/)
+- [WalletConnect v1.0 documentation](https://docs.walletconnect.com/) - official wallet connect v1.0 documentation
