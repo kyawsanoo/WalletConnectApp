@@ -13,3 +13,13 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/.name
+/.idea/compiler.xml
+/.idea/gradle.xml
+/gradle/wrapper/gradle-wrapper.jar
+/gradlew
+/gradlew.bat
+/hs_err_pid2332.log
+/.idea/misc.xml
+/.idea/vcs.xml
+/.idea/.gitignore
