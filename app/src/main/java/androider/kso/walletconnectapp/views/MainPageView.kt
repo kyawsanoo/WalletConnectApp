@@ -1,17 +1,20 @@
-package androider.kso.walletconnectapp
+package androider.kso.walletconnectapp.views
 
-import androider.kso.walletconnectapp.ui.theme.Purple
+import androider.kso.walletconnectapp.ui.theme.Blue700
+import androider.kso.walletconnectapp.ui.theme.Yellow200
 import androider.kso.walletconnectapp.viewmodels.MainViewModel
-import androider.kso.walletconnectapp.widgets.introductionText
-import androider.kso.walletconnectapp.widgets.stepList
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -53,30 +56,77 @@ fun ContentView(
 ){
     val context = LocalContext.current
     val walletAddress = mainViewModel.userWallet.collectAsState().value
+    val isWalletConnected = mainViewModel.isWalletConnected.collectAsState().value
 
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(modifier = Modifier
+    Box(contentAlignment = Alignment.Center,
+        modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray.copy(alpha = .1F)),
-            contentPadding = PaddingValues(vertical = 15.dp, horizontal = 15.dp),
+            .padding(paddingValues)) {
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(15.dp)) {
-            introductionText()
-            stepList(isWalletConnected = false) {
-                mainViewModel.connectWallet(context)
+            verticalArrangement = Arrangement.spacedBy(35.dp)
+        ) {
+            AnimatedVisibility(
+                visible = isWalletConnected,
+                enter = fadeIn(
+                    initialAlpha = 0.4f
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(durationMillis = 250)
+                )
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                ){
+
+                    Text(
+                        text = "Wallet Address : ",
+                        style = MaterialTheme.typography.h6.copy(fontSize = 14.sp, color = Color.Black),
+                        textAlign = TextAlign.Center,
+                    )
+
+                    Text(
+                        text = walletAddress,
+                        style = MaterialTheme.typography.h6.copy(fontSize = 13.sp, color = Blue700),
+                        textAlign = TextAlign.Center,
+                    )
+
+                }
+            }
+
+
+            ConnectButton(isWalletConnected) {
+                when(isWalletConnected){
+                    false -> mainViewModel.connectWallet(context)
+                    true -> mainViewModel.disconnectWallet()
+                }
+
             }
         }
 
-        Text(text = walletAddress,
-            style = MaterialTheme.typography.h6.copy(fontSize = 10.sp, color = Purple),
-            textAlign = TextAlign.Center, modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 5.dp))
+
+
     }
 
 }
 
+@Composable
+fun ConnectButton(isWalletConnected: Boolean, onConnectClick: () -> Unit) {
+    val text = if (isWalletConnected) "Disconnect Wallet" else "Connect Wallet"
+    Button(modifier = Modifier
+        .padding(10.dp)
+        .clip(RoundedCornerShape(15.dp))
+        .fillMaxWidth()
+        .height(44.dp),
+        onClick = onConnectClick,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Yellow200,
+            contentColor = Color.Black)
+    ) {
+        Text(text = text, style = MaterialTheme.typography.button)
+    }
+}
 
 
 

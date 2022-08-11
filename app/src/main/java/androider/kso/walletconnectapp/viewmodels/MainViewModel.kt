@@ -30,6 +30,8 @@ class MainViewModel @Inject constructor(
 
     var userWallet = MutableStateFlow("")
         private set
+    var isWalletConnected = MutableStateFlow(false)
+        private set
     private var config: Session.Config? = null
     private var session: Session? = null
     private var bridge: BridgeServer? = null
@@ -60,6 +62,11 @@ class MainViewModel @Inject constructor(
         session?.offer()
     }
 
+    fun disconnectWallet(){
+        Log.e(tag, "disconnect wallet", )
+        session?.kill()
+        isWalletConnected.value = false
+    }
 
     fun connectWallet(context: Context) {
         resetSession()
@@ -80,10 +87,10 @@ class MainViewModel @Inject constructor(
         when (this) {
             Session.Status.Approved -> sessionApproved()
             Session.Status.Closed -> sessionClosed()
-            Session.Status.Connected,
-            Session.Status.Disconnected,
+            Session.Status.Connected -> isWalletConnected.value = true
+            Session.Status.Disconnected -> isWalletConnected.value = false
             is Session.Status.Error,
-            -> Log.e(tag, "WC Session Status handleStatus: $this", )
+            -> Log.e(tag, "WC Session => Status handleStatus: $this", )
         }
     }
 
@@ -97,4 +104,5 @@ class MainViewModel @Inject constructor(
     private fun sessionClosed() {
 
     }
+
 }

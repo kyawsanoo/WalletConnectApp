@@ -1,6 +1,6 @@
 package androider.kso.walletconnectapp.app
 
-import androider.kso.walletconnectapp.MainPageView
+import androider.kso.walletconnectapp.views.MainPageView
 import androider.kso.walletconnectapp.viewmodels.MainViewModel
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.*
